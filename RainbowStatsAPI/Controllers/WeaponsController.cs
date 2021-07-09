@@ -26,7 +26,7 @@ namespace RainbowStatsAPI.Controllers
         {
             Weapon weapon = await context.Weapons
                 .Include(w => w.Operators)
-                .FirstOrDefaultAsync(w => w.Name == name);
+                .FirstOrDefaultAsync(w => EF.Functions.ILike(w.Name, name));
 
             if (weapon == null)
             {
