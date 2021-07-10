@@ -17,7 +17,7 @@ namespace RainbowStatsAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return Ok(Weapons.Index(await context.Weapons.ToListAsync()));
+            return Ok(WeaponDto.Index(await context.Weapons.ToListAsync()));
         }
 
         [HttpGet]
@@ -33,7 +33,7 @@ namespace RainbowStatsAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(Weapons.Get(weapon));
+            return Ok(WeaponDto.Get(weapon));
         }
     }
 }
