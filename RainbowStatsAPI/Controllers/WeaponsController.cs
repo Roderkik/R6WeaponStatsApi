@@ -10,7 +10,7 @@ namespace RainbowStatsAPI.Controllers
 {
     public class WeaponsController : BaseApiController
     {
-        public WeaponsController(RainbowStatsContext rainbowStatsContext): base(rainbowStatsContext)
+        public WeaponsController(RainbowStatsContext rainbowStatsContext) : base(rainbowStatsContext)
         {
         }
 
@@ -28,12 +28,33 @@ namespace RainbowStatsAPI.Controllers
                 .Include(w => w.Operators)
                 .FirstOrDefaultAsync(w => EF.Functions.ILike(w.Name, name));
 
-            if (weapon == null)
-            {
-                return NotFound();
-            }
+            if (weapon == null) return NotFound();
 
             return Ok(WeaponDto.Get(weapon));
+        }
+
+        [HttpGet]
+        [Route("{name}/Relevant")]
+        public async Task<IActionResult> Relevant(string name)
+        {
+            Weapon weapon = await context.Weapons
+                .Where(w => EF.Functions.ILike(w.Name, name))
+                .Include(w => w.Operators)
+                .ThenInclude(o => o.Weapons)
+                .FirstOrDefaultAsync();
+
+            if (weapon == null) return NotFound();
+
+            ICollection<Weapon> weapons = new List<Weapon>();
+
+            foreach (Operator @operator in weapon.Operators)
+            foreach (Weapon relevantWeapon in @operator.Weapons)
+                if (relevantWeapon.Slot == weapon.Slot &&
+                    !weapons.Contains(relevantWeapon) &&
+                    relevantWeapon != weapon)
+                    weapons.Add(relevantWeapon);
+
+            return Ok(WeaponDto.Index(weapons));
         }
     }
 }

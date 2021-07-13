@@ -7,15 +7,20 @@ namespace RainbowStatsAPI.Models
 {
     public class Weapon
     {
-        [Key]
-        public string Name { get; set; }
+        [Key] public string Name { get; set; }
+
         public string Type { get; set; }
         public string Action { get; set; }
         public string Slot { get; set; }
         public int Rpm { get; set; }
-        [NotMapped]
-        public int[] DamageRanges { get; set; }
-        public string SerializedDamageRanges { get => JsonSerializer.Serialize(DamageRanges); set => DamageRanges = JsonSerializer.Deserialize<int[]>(value); }
+
+        [NotMapped] public double[] DamageRanges { get; set; }
+
+        public string SerializedDamageRanges
+        {
+            get => JsonSerializer.Serialize(DamageRanges);
+            set => DamageRanges = JsonSerializer.Deserialize<double[]>(value);
+        }
 
         public ICollection<Operator> Operators { get; set; }
     }

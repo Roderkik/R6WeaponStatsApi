@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RainbowStatsAPI.Models;
 
 namespace RainbowStatsAPI.DTOs
 {
@@ -9,15 +10,14 @@ namespace RainbowStatsAPI.DTOs
         public string Action { get; set; }
         public string Slot { get; set; }
         public int Rpm { get; set; }
-        public int[] DamageRanges { get; set; }
+        public double[] DamageRanges { get; set; }
         public ICollection<OperatorDto> Operators { get; set; }
 
-        public static ICollection<WeaponDto> Index(ICollection<Models.Weapon> weapons)
+        public static ICollection<WeaponDto> Index(ICollection<Weapon> weapons)
         {
             var index = new List<WeaponDto>();
 
-            foreach (Models.Weapon weapon in weapons)
-            {
+            foreach (Weapon weapon in weapons)
                 index.Add(new WeaponDto
                 {
                     Action = weapon.Action,
@@ -27,21 +27,17 @@ namespace RainbowStatsAPI.DTOs
                     Slot = weapon.Slot,
                     Type = weapon.Type
                 });
-            }
 
             return index;
         }
 
-        public static WeaponDto Get(Models.Weapon weapon)
+        public static WeaponDto Get(Weapon weapon)
         {
             var operatorDtos = new List<OperatorDto>();
 
-            foreach (Models.Operator @operator in weapon.Operators)
-            {
-                operatorDtos.Add(new OperatorDto() { Name = @operator.Name});
-            }
-            
-            return new WeaponDto()
+            foreach (Operator @operator in weapon.Operators) operatorDtos.Add(new OperatorDto {Name = @operator.Name});
+
+            return new WeaponDto
             {
                 Action = weapon.Action,
                 DamageRanges = weapon.DamageRanges,
