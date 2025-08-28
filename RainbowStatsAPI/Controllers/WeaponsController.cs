@@ -26,19 +26,27 @@ namespace RainbowStatsAPI.Controllers
         {
             Weapon weapon = await context.Weapons
                 .Include(w => w.Operators)
-                .FirstOrDefaultAsync(w => EF.Functions.ILike(w.Name, name));
+                .FirstOrDefaultAsync(w => EF.Functions.Like(w.Name.ToLower(), name.ToLower()));
 
-            if (weapon == null) return NotFound();
+            if (weapon == null)
+            {
+                return NotFound();
+            }
 
             return Ok(WeaponDto.Get(weapon));
         }
 
+        /// <summary>
+        /// Returns relevant weapons 
+        /// </summary>
+        /// <param name="name">Name of weapon</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{name}/Relevant")]
         public async Task<IActionResult> Relevant(string name)
         {
             Weapon weapon = await context.Weapons
-                .Where(w => EF.Functions.ILike(w.Name, name))
+                .Where(w => EF.Functions.Like(w.Name.ToLower(), name.ToLower()))
                 .Include(w => w.Operators)
                 .ThenInclude(o => o.Weapons)
                 .FirstOrDefaultAsync();
@@ -48,11 +56,17 @@ namespace RainbowStatsAPI.Controllers
             ICollection<Weapon> weapons = new List<Weapon>();
 
             foreach (Operator @operator in weapon.Operators)
-            foreach (Weapon relevantWeapon in @operator.Weapons)
-                if (relevantWeapon.Slot == weapon.Slot &&
-                    !weapons.Contains(relevantWeapon) &&
-                    relevantWeapon != weapon)
-                    weapons.Add(relevantWeapon);
+            {
+                foreach (Weapon relevantWeapon in @operator.Weapons)
+                {
+                    if (relevantWeapon.Slot == weapon.Slot &&
+                        !weapons.Contains(relevantWeapon) && 
+                        relevantWeapon != weapon)
+                    {
+                        weapons.Add(relevantWeapon);   
+                    }
+                }
+            }
 
             return Ok(WeaponDto.Index(weapons));
         }

@@ -18,7 +18,7 @@ namespace RainbowStatsAPI.Controllers
         {
             Operator @operator = await context.Operators
                 .Include(o => o.Weapons)
-                .FirstOrDefaultAsync(o => EF.Functions.ILike(o.Name, name));
+                .FirstOrDefaultAsync(o => EF.Functions.Like(o.Name.ToLower(), name.ToLower()));
 
             if (@operator == null) return NotFound();
 

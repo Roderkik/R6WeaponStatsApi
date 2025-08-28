@@ -23,7 +23,7 @@ namespace RainbowStatsAPI
         {
             services.AddControllers();
             services.AddCors(options => options.AddPolicy("development", configurePolicy => configurePolicy.AllowAnyOrigin()));
-            services.AddDbContext<RainbowStatsContext>(options => options.UseNpgsql(Configuration["ConnectionString"]));
+            services.AddDbContext<RainbowStatsContext>(options => options.UseSqlite("Data Source=rainbowstats.db"));
             services.AddScoped<IRainbowStatsContext>(provider => provider.GetService<RainbowStatsContext>());
             services.AddSwaggerGen(c =>
             {

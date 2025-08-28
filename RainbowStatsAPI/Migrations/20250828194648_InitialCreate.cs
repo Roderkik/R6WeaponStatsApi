@@ -2,7 +2,7 @@
 
 namespace RainbowStatsAPI.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,7 +10,7 @@ namespace RainbowStatsAPI.Migrations
                 name: "Operators",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -21,12 +21,12 @@ namespace RainbowStatsAPI.Migrations
                 name: "Weapons",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: true),
-                    Action = table.Column<string>(type: "text", nullable: true),
-                    Slot = table.Column<string>(type: "text", nullable: true),
-                    Rpm = table.Column<int>(type: "integer", nullable: false),
-                    SerializedDamageRanges = table.Column<string>(type: "text", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    Action = table.Column<string>(type: "TEXT", nullable: true),
+                    Slot = table.Column<string>(type: "TEXT", nullable: true),
+                    Rpm = table.Column<int>(type: "INTEGER", nullable: false),
+                    SerializedDamageRanges = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,8 +37,8 @@ namespace RainbowStatsAPI.Migrations
                 name: "OperatorWeapon",
                 columns: table => new
                 {
-                    OperatorsName = table.Column<string>(type: "text", nullable: false),
-                    WeaponsName = table.Column<string>(type: "text", nullable: false)
+                    OperatorsName = table.Column<string>(type: "TEXT", nullable: false),
+                    WeaponsName = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
